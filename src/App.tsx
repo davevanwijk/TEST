@@ -6,12 +6,16 @@ import Header from './components/Header'
 import { useImageStore } from './store/imageStore'
 
 function App() {
-  const { images, selectedImage } = useImageStore()
+  const { images, selectedImage, selectImage } = useImageStore()
   const [isDarkMode, setIsDarkMode] = useState(false)
 
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode)
     document.documentElement.classList.toggle('dark')
+  }
+
+  const handleImageSelect = (image: any) => {
+    selectImage(image)
   }
 
   return (
@@ -49,15 +53,30 @@ function App() {
                   </h3>
                   <div className="grid grid-cols-2 gap-4">
                     {images.map((image) => (
-                      <div key={image.id} className="relative group cursor-pointer">
+                      <div 
+                        key={image.id} 
+                        className={`relative group cursor-pointer rounded-lg overflow-hidden ${
+                          selectedImage?.id === image.id ? 'ring-2 ring-primary-500' : ''
+                        }`}
+                        onClick={() => handleImageSelect(image)}
+                      >
                         <img
                           src={image.preview}
                           alt={image.file.name}
-                          className="w-full h-24 object-cover rounded-lg border-2 border-transparent group-hover:border-primary-500 transition-colors"
+                          className="w-full h-24 object-cover transition-transform group-hover:scale-105"
                         />
-                        <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center">
-                          <span className="text-white text-sm font-medium">Select</span>
+                        <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                          <span className="text-white text-sm font-medium">
+                            {selectedImage?.id === image.id ? 'Selected' : 'Select'}
+                          </span>
                         </div>
+                        {selectedImage?.id === image.id && (
+                          <div className="absolute top-2 right-2 w-4 h-4 bg-primary-500 rounded-full flex items-center justify-center">
+                            <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                            </svg>
+                          </div>
+                        )}
                       </div>
                     ))}
                   </div>
@@ -79,7 +98,7 @@ function App() {
                     Select an Image to Process
                   </h3>
                   <p className="text-gray-500 dark:text-gray-400">
-                    Upload an image and select it to start the upscaling process
+                    Upload an image and click on it to start the upscaling process
                   </p>
                 </div>
               )}
