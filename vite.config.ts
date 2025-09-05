@@ -17,8 +17,9 @@ export default defineConfig({
     format: 'es'
   },
   server: {
-    port: 3000,
-    open: true
+    port: 3050,
+    open: true,
+    host: true
   },
   build: {
     target: 'esnext',
