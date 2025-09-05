@@ -18,8 +18,9 @@ export default defineConfig({
   },
   server: {
     port: 3050,
+    host: '0.0.0.0',
     open: true,
-    host: true
+    strictPort: true
   },
   build: {
     target: 'esnext',
